@@ -61,7 +61,7 @@ export default function Home() {
       <section className="">
         <LampDemo></LampDemo>
         <div className="flex items-center justify-center flex-wrap
-        flex-col md:flex-row gap-8">
+        flex-col md:flex-row gap-8 -mt-52">
           <ThreeDCard title="Hobby" price={0}/>
           <ThreeDCard title="Pro Plan" price={29}/>
           <ThreeDCard title="Unlimited" price={99}/>
