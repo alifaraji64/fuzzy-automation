@@ -2,6 +2,7 @@ import { Book, Headphones, Search } from 'lucide-react'
 import React from 'react'
 import { Input } from '../ui/input'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
+import { UserButton } from '@clerk/nextjs'
 
 type Props = {}
 
@@ -36,7 +37,7 @@ function InfoBar({ }: Props) {
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-
+            <UserButton />
         </div >
     )
 }
