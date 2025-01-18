@@ -8,7 +8,7 @@ export default function Layout({ children }: Props) {
     return (
         <div className='flex overflo-hidden h-screen'>
             <MenuOptions></MenuOptions>
-            <div className='w-full'>
+            <div className='w-full p-1'>
                 <InfoBar />
                 {children}
             </div>

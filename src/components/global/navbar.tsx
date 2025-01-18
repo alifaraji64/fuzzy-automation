@@ -4,6 +4,9 @@ import Image from 'next/image'
 import logo from '../../../public/assets/fuzzieLogo.png'
 import Link from 'next/link'
 import { MenuIcon } from 'lucide-react'
+import {
+    UserButton
+} from '@clerk/nextjs'
 
 const Navbar = async () => {
     return (
@@ -43,15 +46,16 @@ const Navbar = async () => {
                     </li>
                 </ul>
             </nav>
-            <aside>
+            <aside className='flex items-center'>
                 <Link href={'/dashboard'} className="inline-flex h-12 animate-shimmer
                  items-center justify-center
                  hover:border-slate-600
                  rounded-md border border-slate-800
                   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                    {true?'Dashboard':'Get Started'}
+                    {true ? 'Dashboard' : 'Get Started'}
                 </Link>
-                <MenuIcon></MenuIcon>
+                <UserButton />
+                <MenuIcon className='md:hidden'></MenuIcon>
 
             </aside>
         </header>
