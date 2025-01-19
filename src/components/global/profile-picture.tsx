@@ -1,24 +1,34 @@
+'use client'
 import React from 'react'
 import UploadCareButton from './upload-care-button'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 import { Button } from '../ui/button'
+import { useRouter } from 'next/navigation'
 
-type Props = { userImage?: string, removeProfilePicture: () => void }
+type Props = {
+    userImage?: string,
+    removeProfilePicture: () => void
+    addProfilePicture: (image:string)=>void
+}
 
-function ProfilePicture({ userImage,removeProfilePicture }: Props) {
+function ProfilePicture({ userImage, removeProfilePicture, addProfilePicture }: Props) {
+    const router = useRouter();
     return (
         <div className='flex flex-col'>
             <p className='text-lg text-white'>Profile Picture</p>
             <div className='flex h-[30vh] flex-col items-center justify-center'>
                 {userImage ?
-                    <div>
-                        <Image alt='test' width={100} height={100} src={'https://ucarecdn.com/c5db0f17-ff21-44d7-8224-4170ee2e6f8a/bd2ebb2a8d6644f4b348faa37c0ab816.jpg'} />
-                        <Button onClick={removeProfilePicture}>
-                            <X/>Remove Picture
+                    <div className='flex flex-col items-center gap-3'>
+                        <Image alt='test' width={200} height={200} src={userImage} />
+                        <Button onClick={()=>{
+                            removeProfilePicture();
+                            router.refresh()
+                        }}>
+                            <X />Remove Picture
                         </Button>
                     </div>
-                    : <UploadCareButton />}
+                    : <UploadCareButton addProfilePicture={addProfilePicture}/>}
             </div>
         </div>
     )

@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 
 type Props = {
-
+  addProfilePicture:(image:string)=>void
 }
 interface UploadcareFile {
     uuid: string;
@@ -18,11 +18,11 @@ interface UploadcareFile {
     [key: string]: any; // Add additional properties if needed
   }
 
-function UploadCareButton({}: Props) {
+ function UploadCareButton({addProfilePicture}: Props) {
     const router = useRouter();
     const [files, setFiles] = useState<UploadcareFile[]>([]);
     const [hasRefreshed, setHasRefreshed] = useState(false);
-  const handleChangeEvent = (e:any) => {
+  const handleChangeEvent = async(e:any) => {
     const successfulFiles = e.allEntries
     ?.filter((file: any) => file.status === "success")
     .map((file: any) => ({
@@ -39,6 +39,7 @@ function UploadCareButton({}: Props) {
   if (files.length > 0 && files[0].cdnUrl && !hasRefreshed) {
     setHasRefreshed(true)
     console.log("Upload was successful");
+    addProfilePicture(files[0].cdnUrl);
     router.refresh();
   }
 

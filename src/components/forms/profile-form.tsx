@@ -8,23 +8,35 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
-type Props = {}
+type Props = {
+    name: string | null,
+    email: string | null,
+    onUpdate: (name: string) => any
+}
 
-function ProfileForm({ }: Props) {
+function ProfileForm({name,email,onUpdate}: Props) {
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false)
     const form = useForm<z.infer<typeof EditUserProfileSchema>>({
         mode: 'onChange',
         resolver: zodResolver(EditUserProfileSchema),
         defaultValues: {
-            name: '',
-            email: ''
+            name:name||'',
+            email:email||'no email'
         }
     })
     return (
         <Form {...form}>
             <form className='flex flex-col gap-5'
-                onSubmit={() => { }}>
+                onSubmit={async(e) => {
+                    e.preventDefault()
+                    setIsLoading(true)
+                    await onUpdate(form.getValues('name'))
+                    router.refresh()
+                    setIsLoading(false)
+                }}>
                 <FormField
                     control={form.control}
                     disabled={isLoading}
@@ -35,7 +47,7 @@ function ProfileForm({ }: Props) {
                                 User Full Name
                             </FormLabel>
                             <FormControl>
-                                <Input placeholder='Name' type='email' {...field} />
+                                <Input placeholder='Name' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -57,7 +69,7 @@ function ProfileForm({ }: Props) {
                         </FormItem>
                     )}
                 />
-                <Button type='submit' className='
+                <Button disabled={form.watch('name')==name}  type='submit' className='
                 hover:bg-[#2F006B] hover:text-white'>
                     {isLoading ?
                         <>
