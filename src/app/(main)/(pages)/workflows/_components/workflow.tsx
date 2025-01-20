@@ -15,7 +15,7 @@ function Workflow({ name, description, id, publish }: Props) {
     return (
         <Card className='flex w-full items-center justify-between'>
             <CardHeader className='flex flex-col gap-4'>
-                <Link href={'/workflow/editor/' + id } className='flex flex-col gap-2'>
+                <Link href={'/workflows/editor/' + id } className='flex flex-col gap-2'>
                     <div className='flex gap-1'>
                         <Image
                             src={'/assets/googleDrive.png'}

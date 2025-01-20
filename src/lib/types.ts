@@ -6,7 +6,7 @@ export const EditUserProfileSchema = z.object({
   name: z.string().min(1, 'Required')
 })
 export const WorkflowSchema = z.object({
-  title: z.string().min(3,'Required'),
+  title: z.string().min(3, 'Required'),
   subHeading: z.string().min(3, 'Required')
 })
 
@@ -20,4 +20,60 @@ export type Connection = {
   accessTokenKey?: string
   alwaysTrue?: boolean
   slackSpecial?: boolean
+}
+export type EditorCanvasTypes =
+  | 'Email'
+  | 'Condition'
+  | 'AI'
+  | 'Slack'
+  | 'Google Drive'
+  | 'Notion'
+  | 'Custom Webhook'
+  | 'Google Calendar'
+  | 'Trigger'
+  | 'Action'
+export type EditorCanvasCardType = {
+  title: string
+  description: string
+  completed: boolean
+  current: boolean
+  metadata: any
+  type: EditorCanvasTypes
+}
+
+export type EditorNodeType = {
+  id: string
+  type: EditorCanvasCardType['type']
+  position: {
+    x: number
+    y: number
+  }
+  data: EditorCanvasCardType
+}
+
+export type EditorActions = |{
+  type:'LOAD_DATA',
+  payload:{
+    elements:EditorNodeType[],
+    edges:{
+      source:string,
+      target:string,
+      id:string
+    }[]
+  }
+}
+|
+{
+  type:'UPDATE_NODE',
+  payload:{
+    elements:EditorNodeType[],
+  }
+}
+|{type:'REDO'}
+|{type:'UNDO'}
+|{
+  type:'SELECTED_ELEMENT',
+  payload:{
+    element:EditorNodeType
+  }
 }
