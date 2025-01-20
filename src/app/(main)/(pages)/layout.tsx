@@ -7,7 +7,7 @@ export default function Layout({ children }: Props) {
         <div className='flex overflo-hidden
          h-screen border-l-[1px]
           border-t-[1px] pb-20 rounded-l-3xl
-          border-muted-foreground/20 overflow-scroll'>
+          border-muted-foreground/20 overflow-scroll min-w-full'>
             {children}
         </div>
     )

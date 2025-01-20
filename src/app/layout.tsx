@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import {
   ClerkProvider
 } from '@clerk/nextjs'
+import ModalProvider from "@/providers/modal-provider";
 const font = DM_Sans({
   subsets: ["latin"],
 });
@@ -20,18 +21,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <ClerkProvider
-        publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-        <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
-          <body
-            className={`${font.className} antialiased`}
-          >
-            {children}
-          </body>
-
-        </ThemeProvider>
-      </ClerkProvider>
-    </html>
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+      <html>
+        <body
+          className={`${font.className} antialiased`}
+        >
+          <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
+            <ModalProvider>
+              {children}
+            </ModalProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
