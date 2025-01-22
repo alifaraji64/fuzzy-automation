@@ -5,8 +5,8 @@ import EditorCanvas from './_components/editor-canvas'
 
 
 
-function Editor({ params }: any) {
-  const { id } = params
+async function Editor({ params }: any) {
+  const { id } = await params
   return (
     <div>
       <EditorProvider>
