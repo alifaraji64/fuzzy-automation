@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Background, Connection, Controls, Edge, EdgeChange, MiniMap, Node, NodeChange, ReactFlow, ReactFlowInstance, addEdge, applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
@@ -53,10 +53,13 @@ function EditorCanvas({ }: Props) {
     const onDrop = useCallback(
         (event: any) => {
             event.preventDefault()
+            console.log('dropped');
 
             const type: EditorCanvasCardType['type'] = event.dataTransfer.getData(
                 'application/reactflow'
             )
+            console.log(nodes);
+
 
             // check if the dropped element is valid
             if (typeof type === 'undefined' || !type) {
@@ -93,7 +96,12 @@ function EditorCanvas({ }: Props) {
                 },
             }
             //@ts-ignore
-            setNodes((nds) => nds.concat(newNode))
+            console.log("Before update:", nodes);
+            setNodes((nds) => {
+                const updatedNodes = nds.concat(newNode);
+                console.log("After update:", updatedNodes);
+                return updatedNodes;
+            });
         },
         [reactFlowInstance, state]
     )
@@ -141,6 +149,13 @@ function EditorCanvas({ }: Props) {
             }
         })
     }
+    useEffect(() => {
+      dispatch({type:'LOAD_DATA',payload:{
+          edges,
+          elements: nodes
+      }})
+    }, [nodes,edges])
+
 
     return (
         <ResizablePanelGroup direction={'horizontal'} className='w-2/3'>
@@ -186,9 +201,9 @@ function EditorCanvas({ }: Props) {
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={40} className='relative sm:block'>
-                {isWorkFlowLoading? <SVGLoader />: <FlowInstance edges={edges} nodes={nodes} >
+                {isWorkFlowLoading ? <SVGLoader /> : <FlowInstance edges={edges} nodes={nodes} >
                     <EditorCanvasSidebar nodes={nodes} />
-                </FlowInstance> }
+                </FlowInstance>}
             </ResizablePanel>
         </ResizablePanelGroup>
     )
