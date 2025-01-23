@@ -31,7 +31,7 @@ export type EditorState = {
   history: HistoryState
 }
 
-const initialEditorState: EditorState['editor'] = {
+export const initialEditorState: EditorState['editor'] = {
   elements: [],
   selectedNode: {
     data: {
