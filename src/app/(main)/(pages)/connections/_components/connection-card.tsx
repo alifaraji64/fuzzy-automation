@@ -9,8 +9,7 @@ type Props = {
     icon: string,
     title: ConnectionTypes,
     description: string,
-    callBack: () => void
-    connected: {}
+    connected: {[key in ConnectionTypes]?: any;}
 }
 
 function ConnectionCard({
@@ -18,7 +17,6 @@ function ConnectionCard({
     icon,
     title,
     description,
-    callBack,
     connected
 }: Props) {
     return (
@@ -43,11 +41,12 @@ function ConnectionCard({
                 </div>
             </CardHeader>
             <div className="flex flex-col items-center gap-2 p-4">
-                {/* {connected[type] ? (
+                <p>jlkj {connected[type]}</p>
+                {connected[type] ? (
                     <div className="border-bg-primary rounded-lg border-2 px-3 py-2 font-bold text-white">
                         Connected
                     </div>
-                ) : ( */}
+                ) : (
                     <Link
                         href={
                             title == 'Discord'
@@ -62,7 +61,7 @@ function ConnectionCard({
                     >
                         Connect
                     </Link>
-                {/* )} */}
+                )}
             </div>
         </Card>
     )

@@ -165,7 +165,7 @@ function EditorCanvas({ }: Props) {
                         className="relative">
                         {isWorkFlowLoading ?
                             <SVGLoader /> : (<ReactFlow
-                                className="w-[300px]"
+                                className="w-[500px]"
                                 onDrop={onDrop}
                                 onDragOver={onDragOver}
                                 nodes={state.editor.elements}
