@@ -7,6 +7,8 @@ import { EditorState } from '@/providers/editor-provider'
 import { AccordionContent } from '@radix-ui/react-accordion'
 import React from 'react'
 import GoogleFileDetails from './google-file-details'
+import GoogleDriveFile from './google-drive-files'
+import ActionButton from './action-button'
 export type Option = {
     value: string,
     label: string,
@@ -82,8 +84,20 @@ function ContentBasedOnTitle({
                                 </div>
                             </CardContent>
                         </Card>
-                    ):(<><h1>hi</h1></>)
+                    ):(
+                        <GoogleDriveFile
+                        nodeConnection={nodeConnection}
+                        googleFile={file}
+                        setGoogleFile={setFile}
+                        />
+                    )
                 }
+                <ActionButton
+                currentService={title}
+                nodeConnection={nodeConnection}
+                channels={selectedSlackChannels}
+                setChannels={setSelectedSlackChannels}
+                />
 
                 </div>
             </Card>
