@@ -1,19 +1,21 @@
 import { Button } from '@/components/ui/button'
 import { useNodeConnections } from '@/providers/connections-provider'
 import { usePathname } from 'next/navigation'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { onCreateNodesEdges, onFlowPublish } from '../../../_actions/workflow-connections'
 import { useToast } from "@/hooks/use-toast"
+import { CustomEdge } from './editor-canvas'
+import { EditorCanvasTypes, EditorNodeType } from '@/lib/types'
 type Props = {
     children: React.ReactNode
-    edges: any[],
-    nodes: any[]
+    edges: CustomEdge[],
+    nodes: EditorNodeType[]
 }
 
 function FlowInstance({ children, edges, nodes }: Props) {
     const { toast } = useToast()
     const pathName = usePathname();
-    const [isFlow, setisFlow] = useState([])
+    const [isFlow, setisFlow] = useState<EditorCanvasTypes[]>([])
     const { nodeConnection } = useNodeConnections()
     const onFlowAutomation = useCallback(async () => {
         const flow = await onCreateNodesEdges(
@@ -32,6 +34,23 @@ function FlowInstance({ children, edges, nodes }: Props) {
         },
         [],
     )
+    const onAutomateFlow = async () => {
+        const flows: EditorCanvasTypes[] = [];
+        const connectedEdges = edges.map(edge => edge.target)
+        connectedEdges.forEach(target => {
+            nodes.forEach(node => {
+                if (node.id === target) {
+                    flows.push(node.type)
+                }
+            })
+        })
+        setisFlow(flows)
+    }
+
+    useEffect(() => {
+      onAutomateFlow()
+    }, [edges])
+
 
     return (
         <div className='flex flex-col gap-2'>

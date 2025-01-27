@@ -1,5 +1,6 @@
 'use server'
 import { db } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const onSlackConnect = async (
     app_id: string,
@@ -33,5 +34,19 @@ export const onSlackConnect = async (
                 },
             }
         })
+    }
+}
+
+export const getSlackConnection = async () => {
+    try {
+        const user = await currentUser()
+        if (!user) throw new Error('user is required for getSlackConnection')
+        return await db.slack.findFirst({
+            where: {
+                userId: user.id
+            }
+        })
+    } catch (error) {
+        console.log(error)
     }
 }

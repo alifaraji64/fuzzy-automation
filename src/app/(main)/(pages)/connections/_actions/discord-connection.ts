@@ -1,6 +1,7 @@
 'use server'
 
-import { db } from "@/lib/db"
+import { db } from '@/lib/db'
+import { currentUser } from '@clerk/nextjs/server'
 
 export const onDiscordConnect = async (
   channel_id: string,
@@ -11,7 +12,7 @@ export const onDiscordConnect = async (
   guild_name: string,
   guild_id: string
 ) => {
-  if (webhook_id) return;
+  if (!webhook_id) return
   const webhook = await db.discordWebhook.findFirst({
     where: {
       userId: id
@@ -26,7 +27,6 @@ export const onDiscordConnect = async (
   })
   if (!webhook) {
     await db.discordWebhook.create({
-
       data: {
         userId: id,
         webhookId: webhook_id,
@@ -42,9 +42,9 @@ export const onDiscordConnect = async (
           //discordWebhook table
           create: {
             userId: id,
-            type: 'Discord',
-          },
-        },
+            type: 'Discord'
+          }
+        }
       }
     })
   }
@@ -52,15 +52,15 @@ export const onDiscordConnect = async (
     //check if channelId is set in the row
     const webhook_channel = await db.discordWebhook.findUnique({
       where: {
-        channelId: channel_id,
+        channelId: channel_id
       },
       include: {
         connections: {
           select: {
-            type: true,
-          },
-        },
-      },
+            type: true
+          }
+        }
+      }
     })
     if (!webhook_channel) {
       await db.discordWebhook.create({
@@ -75,14 +75,31 @@ export const onDiscordConnect = async (
           connections: {
             create: {
               userId: id,
-              type: 'Discord',
-            },
-          },
-        },
+              type: 'Discord'
+            }
+          }
+        }
       })
     }
   }
+}
 
-
-
+export const getDiscordConnectionUrl = async () => {
+  try {
+    const user = await currentUser()
+    if (!user) throw new Error('user is required for getDiscordConnectionUrl')
+    const webhook = await db.discordWebhook.findFirst({
+      where: {
+        userId: user.id
+      },
+      select: {
+        url: true,
+        name: true,
+        guildName: true
+      }
+    })
+    return webhook
+  } catch (error) {
+    console.log(error)
+  }
 }

@@ -1,9 +1,11 @@
+'use client'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { onFlowPublish } from '../_actions/workflow-connections'
+import { MouseEventHandler } from 'react'
 type Props = {
     name: string,
     description: string,
@@ -12,10 +14,19 @@ type Props = {
 }
 
 function Workflow({ name, description, id, publish }: Props) {
+    const onPublishFlow = async (event: React.MouseEvent<HTMLButtonElement>) => {
+        // const response = await onFlowPublish(
+        //     id,
+        //     event.currentTarget.ariaChecked == 'true',)
+        console.log(event.currentTarget.ariaChecked);
+        console.log(event.currentTarget.ariaChecked=='false');
+        publish=!publish
+
+    }
     return (
         <Card className='flex w-full items-center justify-between'>
             <CardHeader className='flex flex-col gap-4'>
-                <Link href={'/workflows/editor/' + id } className='flex flex-col gap-2'>
+                <Link href={'/workflows/editor/' + id} className='flex flex-col gap-2'>
                     <div className='flex gap-1'>
                         <Image
                             src={'/assets/googleDrive.png'}
@@ -44,8 +55,17 @@ function Workflow({ name, description, id, publish }: Props) {
                 </Link>
             </CardHeader>
             <div className='flex flex-col items-center gap-2 p-4'>
-                <Label>On</Label>
-                <Switch></Switch>
+                <Label
+                    htmlFor='airplane-mode'
+                    className='text-muted-foreground'
+                >
+                    {publish ? 'On' : 'Off'}
+                </Label>
+                <Switch
+                    id='airplane-mode'
+                    defaultChecked={publish!}
+                    onClick={onPublishFlow}
+                />
             </div>
         </Card>
     )

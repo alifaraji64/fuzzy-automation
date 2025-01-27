@@ -20,7 +20,7 @@ import FlowInstance from './flow-instance';
 import EditorCanvasSidebar from './editor-canvas-sidebar';
 type Props = {}
 
-
+export type CustomEdge = Edge & { target: string, source: string, id: string }
 
 function EditorCanvas({ }: Props) {
     const { toast } = useToast()
@@ -42,7 +42,6 @@ function EditorCanvas({ }: Props) {
         []
 
     )
-    type CustomEdge = Edge & { target: string, source: string, id: string }
     const { dispatch, state } = useEditor()
     const [nodes, setNodes] = useState<EditorNodeType[]>([])
     const [edges, setEdges] = useState<CustomEdge[]>([])
@@ -201,7 +200,9 @@ function EditorCanvas({ }: Props) {
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={40} className='relative sm:block'>
-                {isWorkFlowLoading ? <SVGLoader /> : <FlowInstance edges={edges} nodes={nodes} >
+                {isWorkFlowLoading ?
+                 <SVGLoader /> :
+                 <FlowInstance edges={edges} nodes={nodes} >
                     <EditorCanvasSidebar nodes={nodes} />
                 </FlowInstance>}
             </ResizablePanel>
