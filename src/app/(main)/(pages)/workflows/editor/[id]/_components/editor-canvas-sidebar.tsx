@@ -6,7 +6,7 @@ import { useNodeConnections } from '@/providers/connections-provider'
 import { Separator } from '@/components/ui/separator'
 import { CONNECTIONS, EditorCanvasDefaultCardTypes } from '@/lib/constants'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { onConnections, onDragStart } from '@/lib/editor-utils'
+import { fetchBotSlackChannels, onConnections, onDragStart } from '@/lib/editor-utils'
 import EditorCanvasIconHelper from './editor-canvas-icon-helper'
 import {
     Accordion,
@@ -32,6 +32,13 @@ function EditorCanvasSidebar({ nodes }: Props) {
             onConnections(nodeConnection, state, googleFile)
         }
     }, [state])
+    useEffect(() => {
+        if (nodeConnection.slackNode.slackAccessToken) {
+            fetchBotSlackChannels(
+                nodeConnection.slackNode.slackAccessToken,
+                setSlackChannels)
+        }
+    }, [nodeConnection])
     return (
         <aside>
             <Tabs defaultValue='actions' className='h-screen overflow-scroll pb-24'>

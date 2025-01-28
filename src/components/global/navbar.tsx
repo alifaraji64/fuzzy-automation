@@ -7,10 +7,12 @@ import { MenuIcon } from 'lucide-react'
 import {
     UserButton
 } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 
 const Navbar = async () => {
+    const user = await currentUser();
     return (
-        <header className="fixed right-0 left-0 top-0 py-4 px-4 
+        <header className="fixed right-0 left-0 top-0 py-4 px-4
         bg-black-400 backdrop-blur-lg z-[100] flex items-center
         border-b-[1px] border-neutral-900 justify-between">
             <aside className='flex items-center gap-[2px]'>
@@ -47,14 +49,15 @@ const Navbar = async () => {
                 </ul>
             </nav>
             <aside className='flex items-center'>
-                <Link href={'/dashboard'} className="inline-flex h-12 animate-shimmer
+                <Link href={'/dashboard'} className="inline-flex h-12 mr-3 animate-shimmer
                  items-center justify-center
                  hover:border-slate-600
                  rounded-md border border-slate-800
                   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                    {true ? 'Dashboard' : 'Get Started'}
+                    {user ? 'Dashboard' : 'Get Started'}
                 </Link>
-                <UserButton />
+                {user ? <UserButton/>:null}
+
                 <MenuIcon className='md:hidden'></MenuIcon>
 
             </aside>

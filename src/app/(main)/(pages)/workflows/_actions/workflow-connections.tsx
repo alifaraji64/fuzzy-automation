@@ -39,8 +39,8 @@ export const onFlowPublish = async (workflowId: string, state: boolean) => {
         if (published.publish) return 'workflow published'
         return 'workflow not published'
     } catch (error) {
-        console.log('error publishing the workflow');
         console.log(error);
+        return 'error publishing the workflow'
     }
 }
 

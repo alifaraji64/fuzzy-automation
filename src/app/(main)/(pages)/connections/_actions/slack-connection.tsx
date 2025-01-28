@@ -1,6 +1,8 @@
 'use server'
 import { db } from "@/lib/db";
+import { Option } from "@/store";
 import { currentUser } from "@clerk/nextjs/server";
+import axios from "axios";
 
 export const onSlackConnect = async (
     app_id: string,
@@ -49,4 +51,25 @@ export const getSlackConnection = async () => {
     } catch (error) {
         console.log(error)
     }
+}
+
+export const listBotChannels = async (token: string): Promise<Option[]> => {
+    const url = `https://slack.com/api/conversations.list?${new URLSearchParams({
+        types: 'public_channel,private_channel',
+        limit: '200',
+    })}`
+    try {
+        const { data } = await axios.get(url, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        if (!data.ok) throw new Error(data.error)
+        if (!data?.channels?.length) return [];
+        return data.channels.filter((channel: any) => channel.is_member)
+            .map((channel: any) => {
+                return{ label: channel.name, value: channel.id }
+            })
+    } catch (error:any) {
+        console.log('error listing bot channels: ', error.message);
+        throw error;
+}
 }

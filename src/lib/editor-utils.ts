@@ -6,7 +6,8 @@ import {
   getNotionConnection,
   getNotionDatabase
 } from '@/app/(main)/(pages)/connections/_actions/notion-connection'
-import { getSlackConnection } from '@/app/(main)/(pages)/connections/_actions/slack-connection'
+import { getSlackConnection, listBotChannels } from '@/app/(main)/(pages)/connections/_actions/slack-connection'
+import { Option } from '@/store'
 
 export const onDragStart = (
   event: React.DragEvent,
@@ -129,4 +130,11 @@ export const onConnections = async (
       })
     }
   }
+}
+
+export const fetchBotSlackChannels = (
+  token:string,
+  setSlackChannels:(slackChannels:Option[])=>void
+)=>{
+listBotChannels(token)?.then((channels:any)=>setSlackChannels(channels))
 }

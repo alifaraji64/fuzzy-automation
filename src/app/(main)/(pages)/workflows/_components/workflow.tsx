@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { onFlowPublish } from '../_actions/workflow-connections'
 import { MouseEventHandler } from 'react'
+import { useToast } from '@/hooks/use-toast'
 type Props = {
     name: string,
     description: string,
@@ -14,13 +15,12 @@ type Props = {
 }
 
 function Workflow({ name, description, id, publish }: Props) {
+    const { toast } = useToast()
     const onPublishFlow = async (event: React.MouseEvent<HTMLButtonElement>) => {
-        // const response = await onFlowPublish(
-        //     id,
-        //     event.currentTarget.ariaChecked == 'true',)
-        console.log(event.currentTarget.ariaChecked);
-        console.log(event.currentTarget.ariaChecked=='false');
-        publish=!publish
+        const response = await onFlowPublish(
+            id,
+            event.currentTarget.ariaChecked == 'true',)
+        toast({ title: response })
 
     }
     return (

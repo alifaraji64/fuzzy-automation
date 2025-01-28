@@ -11,7 +11,7 @@ function WorkFlows({ }: Props) {
                     description='creating a test workflow'
                     name='automation workflow'
                     id='534535'
-                    publish={false}
+                    publish={true}
                      />
                 <Workflow
                     description='creating a test workflow'
