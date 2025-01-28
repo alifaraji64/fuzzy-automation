@@ -49,40 +49,6 @@ export const onDiscordConnect = async (
       }
     })
   }
-  if (webhook) {
-    //check if channelId is set in the row
-    const webhook_channel = await db.discordWebhook.findUnique({
-      where: {
-        channelId: channel_id
-      },
-      include: {
-        connections: {
-          select: {
-            type: true
-          }
-        }
-      }
-    })
-    if (!webhook_channel) {
-      await db.discordWebhook.create({
-        data: {
-          userId: id,
-          webhookId: webhook_id,
-          channelId: channel_id!,
-          guildId: guild_id!,
-          name: webhook_name!,
-          url: webhook_url!,
-          guildName: guild_name!,
-          connections: {
-            create: {
-              userId: id,
-              type: 'Discord'
-            }
-          }
-        }
-      })
-    }
-  }
 }
 
 export const getDiscordConnectionUrl = async () => {
