@@ -66,10 +66,53 @@ export const listBotChannels = async (token: string): Promise<Option[]> => {
         if (!data?.channels?.length) return [];
         return data.channels.filter((channel: any) => channel.is_member)
             .map((channel: any) => {
-                return{ label: channel.name, value: channel.id }
+                return { label: channel.name, value: channel.id }
             })
-    } catch (error:any) {
+    } catch (error: any) {
         console.log('error listing bot channels: ', error.message);
         throw error;
+    }
 }
+
+const postMessageInSlackChannel = async (
+    slackAccessToken: string,
+    slackChannel: string,
+    content: string
+): Promise<void> => {
+    try {
+        await axios.post(
+            'https://slack.com/api/chat.postMessage',
+            { channel: slackChannel, text: content },
+            {
+                headers: {
+                    Authorization: `Bearer ${slackAccessToken}`,
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+            }
+        )
+        console.log(`Message posted successfully to channel ID: ${slackChannel}`)
+    } catch (error: any) {
+        console.error(
+            `Error posting message to Slack channel ${slackChannel}:`,
+            error?.response?.data || error.message
+        )
+    }
+}
+
+export const postMessageToSlack = async (
+    slackAccessToken: string,
+    selectedSlackChannels: Option[],
+    content: string
+): Promise<{ message: string }> => {
+    if (!content) return { message: 'Content is empty' }
+    if (!selectedSlackChannels?.length) return { message: 'Channel not selected' }
+    try {
+
+        for (const channel of selectedSlackChannels.map(channel => channel.value)) {
+            await postMessageInSlackChannel(slackAccessToken, channel, content)
+        }
+        return { message: 'Sucess' }
+    } catch (error) {
+        throw error;
+    }
 }
