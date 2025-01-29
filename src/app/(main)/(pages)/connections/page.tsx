@@ -32,7 +32,7 @@ async function Connections({ searchParams }: Props) {
         bot_user_id,
         team_id,
         team_name,
-    } = searchParams ?? {
+    } = await searchParams ?? {
         webhook_id: '',
         webhook_name: '',
         webhook_url: '',

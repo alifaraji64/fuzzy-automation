@@ -14,7 +14,10 @@ export const onSlackConnect = async (
     team_name: string,
     user_id: string
 ) => {
+    
     if (!slack_access_token) return;
+    console.log('slack access token exists');
+    
     const slackConnection = await db.slack
         .findFirst({
             where: { slackAccessToken: slack_access_token },
