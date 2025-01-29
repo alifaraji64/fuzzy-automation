@@ -12,17 +12,26 @@ export async function GET (req: NextRequest) {
 
   try {
     // Make a POST request to Slack's OAuth endpoint to exchange the code for an access token
-    const { data } = await axios.post('https://slack.com/api/oauth.v2.access', {
+    const response = await fetch('https://slack.com/api/oauth.v2.access', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data: new URLSearchParams({
+      body: new URLSearchParams({
         code,
         client_id: process.env.SLACK_CLIENT_ID!,
         client_secret: process.env.SLACK_CLIENT_SECRET!,
-        redirect_uri: process.env.SLACK_REDIRECT_URI!
-      }).toString()
+        redirect_uri: process.env.SLACK_REDIRECT_URI!,
+      }),
     })
+
+    const data = await response.json()
+
+    if (!data.ok) {
+      console.log('Slack OAuth failed');
+
+      throw new Error(data.error || 'Slack OAuth failed')
+    }
 
     const appId = data?.app_id
     const userId = data?.authed_user?.id
