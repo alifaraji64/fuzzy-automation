@@ -19,8 +19,6 @@ function GoogleDriveFile({ nodeConnection, googleFile, setGoogleFile }: Props) {
     const reqGoogle = async () => {
         setloading(true);
         const response = await axios.get('/api/drive-activity')
-        console.log('response');
-        console.log(response);
 
 
         if (response) {
