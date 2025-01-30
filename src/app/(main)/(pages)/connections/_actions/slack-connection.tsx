@@ -114,9 +114,9 @@ export const postMessageToSlack = async (
     content: string
 )  => {
     console.log('contennt');
-    
+
     console.log(content);
-    
+
     if (!content) return { message: 'Content is empty' }
     if (!selectedSlackChannels?.length) return { message: 'Channel not selected' }
     try {
@@ -124,7 +124,7 @@ export const postMessageToSlack = async (
         for (const channel of selectedSlackChannels.map(channel => channel.value)) {
             await postMessageInSlackChannel(slackAccessToken, channel, content)
         }
-        return { message: 'Sucess' }
+        return { message: 'Success' }
     } catch (error) {
         throw error;
     }

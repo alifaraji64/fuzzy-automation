@@ -94,14 +94,14 @@ function ActionButton({
             nodeConnection.slackNodeRef.current.content
         )
         if (response.message == 'Success') {
-            toast({ title: 'Message sent successfully' })
+            toast({ title: 'Message sent successfully',style:{backgroundColor:'green',color:'white'} })
             nodeConnection.setSlackNode((prev: any) => ({
                 ...prev,
                 content: '',
             }))
             setChannels!([])
         } else {
-            toast({ title: response.message })
+            toast({ title: response.message,variant:'destructive' })
         }
     }, [])
     switch (currentService) {
