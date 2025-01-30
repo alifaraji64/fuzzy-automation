@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 
 export type ConnectionProviderProps = {
   discordNode: {
@@ -43,6 +43,7 @@ export type ConnectionProviderProps = {
   >
   isLoading: boolean
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  slackNodeRef:any
 }
 
 type ConnectionWithChildProps = {
@@ -85,6 +86,7 @@ const InitialValues: ConnectionProviderProps = {
   setSlackNode: () => undefined,
   setIsLoading: () => undefined,
   setWorkFlowTemplate: () => undefined,
+  slackNodeRef:{}
 }
 
 const ConnectionsContext = createContext<ConnectionProviderProps>(InitialValues)
@@ -94,6 +96,7 @@ export const ConnectionsProvider = ({ children }: ConnectionWithChildProps) => {
   const [googleNode, setGoogleNode] = useState(InitialValues.googleNode)
   const [notionNode, setNotionNode] = useState(InitialValues.notionNode)
   const [slackNode, setSlackNode] = useState(InitialValues.slackNode)
+  const slackNodeRef = useRef(slackNode);
   const [isLoading, setIsLoading] = useState(InitialValues.isLoading)
   const [workflowTemplate, setWorkFlowTemplate] = useState(
     InitialValues.workflowTemplate
@@ -112,7 +115,11 @@ export const ConnectionsProvider = ({ children }: ConnectionWithChildProps) => {
     setIsLoading,
     workflowTemplate,
     setWorkFlowTemplate,
+    slackNodeRef
   }
+  useEffect(() => {
+    slackNodeRef.current = slackNode;
+  }, [slackNode]);
 
   return <ConnectionsContext.Provider value={values}>
     {children}

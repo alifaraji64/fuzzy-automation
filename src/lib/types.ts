@@ -7,7 +7,7 @@ export const EditUserProfileSchema = z.object({
 })
 export const WorkflowSchema = z.object({
   title: z.string().min(3, 'Required'),
-  subHeading: z.string().min(3, 'Required')
+  description: z.string().min(3, 'Required')
 })
 
 export type ConnectionTypes = 'Google Drive' | 'Notion' | 'Slack' | 'Discord'

@@ -25,22 +25,14 @@ export async function GET (req: NextRequest) {
       })
     })
     const data = await response.json()
-    console.log('data')
-    console.log(data)
     if (!data) {
       console.log('notion OAuth failed')
-      console.log(response)
-
       throw new Error('notion OAuth failed')
     }
 
     const notion = new Client({
       auth: data.access_token
     })
-    const user = await notion.users.me({});
-    console.log('user');
-
-console.log(user);
     const databasesPages = await notion.search({
       filter: {
         value: 'database',
@@ -58,12 +50,7 @@ console.log(user);
     console.log(databaseId)
 
     return NextResponse.redirect(
-      `https://localhost:3000/connections?
-           access_token=${data.access_token}
-           &workspace_name=${data.workspace_name}
-           &workspace_icon=${data.workspace_icon}
-           &workspace_id=${data.workspace_id}
-           &database_id=${databaseId}`
+      `https://localhost:3000/connections?access_token=${data.access_token}&workspace_name=${data.workspace_name}&workspace_icon=${data.workspace_icon}&workspace_id=${data.workspace_id}&database_id=${databaseId}`
     )
   } catch (error) {
     console.error(error)

@@ -91,7 +91,7 @@ function ActionButton({
         const response = await postMessageToSlack(
             nodeConnection.slackNode.slackAccessToken,
             channels!,
-            nodeConnection.slackNode.content
+            nodeConnection.slackNodeRef.current.content
         )
         if (response.message == 'Success') {
             toast({ title: 'Message sent successfully' })

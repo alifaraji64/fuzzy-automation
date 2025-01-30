@@ -112,7 +112,11 @@ export const postMessageToSlack = async (
     slackAccessToken: string,
     selectedSlackChannels: Option[],
     content: string
-): Promise<{ message: string }> => {
+)  => {
+    console.log('contennt');
+    
+    console.log(content);
+    
     if (!content) return { message: 'Content is empty' }
     if (!selectedSlackChannels?.length) return { message: 'Channel not selected' }
     try {

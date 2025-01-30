@@ -37,6 +37,7 @@ function ContentBasedOnTitle({
     const { title } = selectedNode.data
     const nodeConnectionType: any =
         nodeConnection[nodeMapper[title] as keyof ConnectionProviderProps]
+        
     if (!nodeConnectionType) return <p>Not Connected</p>
     const isConnected =
         title == 'Google Drive' ? !nodeConnection.isLoading
@@ -46,7 +47,6 @@ function ContentBasedOnTitle({
                     title == 'Notion' ? 'accessToken' : ''
             }`
             ]
-    console.log(isConnected);
 
     return (
         <AccordionContent>
@@ -54,8 +54,7 @@ function ContentBasedOnTitle({
                 {title == 'Discord' && (
                     <CardHeader>
                         <p>Discord</p>
-                        <CardTitle>{nodeConnectionType.webhookURL}</CardTitle>
-                        <CardDescription>{nodeConnectionType.guilName}</CardDescription>
+                        <CardDescription>{nodeConnectionType.guildName}</CardDescription>
                     </CardHeader>
                 )}
                 <div className='flex flex-col gap-3 py-3 pb-20'>
@@ -65,6 +64,7 @@ function ContentBasedOnTitle({
                             type='text'
                             value={nodeConnectionType.content}
                             onChange={(event) => {
+                                
                                 onContentChange(nodeConnection, title, event)
                             }}
                         />

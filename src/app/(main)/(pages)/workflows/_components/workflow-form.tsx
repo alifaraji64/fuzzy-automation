@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useToast } from '@/hooks/use-toast'
 import { WorkflowSchema } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
@@ -9,25 +10,37 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
-
+import { onCreateWorkflow } from '../_actions/workflow-connections'
+import { useModal } from '@/providers/modal-provider'
 type Props = {
     title: string,
     subHeading: string
 }
 
 function WorkflowForm({ title, subHeading }: Props) {
+    const { toast } = useToast()
     const form = useForm<z.infer<typeof WorkflowSchema>>({
         mode: 'onChange',
         resolver: zodResolver(WorkflowSchema),
         defaultValues: {
             title: '',
-            subHeading: ''
+            description: ''
         },
     })
     const isLoading = form.formState.isLoading;
     const router = useRouter()
-    const handleSubmit = () => { }
+    const { isOpen, setClose } = useModal()
+    const handleSubmit = async (values: z.infer<typeof WorkflowSchema>) => {
+        console.log('test');
+
+        const workflow = await onCreateWorkflow(values.title, values.description)
+        if (workflow) {
+            setClose()
+            toast({ title: workflow.message })
+            router.refresh()
+            form.reset()
+        }
+    }
     return (
         <Card className='w-full max-w-[650px] border-none mx-auto'>
             {title && subHeading && (
@@ -60,7 +73,7 @@ function WorkflowForm({ title, subHeading }: Props) {
                                 />
                                 <FormField
                                     disabled={isLoading}
-                                    name='subHeading'
+                                    name='description'
                                     control={form.control}
                                     render={({ field }) => (
                                         <FormItem>
@@ -75,8 +88,6 @@ function WorkflowForm({ title, subHeading }: Props) {
                                     )}
                                 />
                                 <Button
-                                onClick={()=>{console.log('loog');
-                                }}
                                     className='mt-4'
                                     disabled={isLoading}
                                     type='submit'>

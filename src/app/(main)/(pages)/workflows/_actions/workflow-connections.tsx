@@ -1,8 +1,9 @@
 'use server'
 
 import { db } from "@/lib/db"
-import { auth } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
 import { Option } from "@/store"
+import { error } from "node:console"
 export const onCreateNodesEdges = async (
     flowId: string,
     nodes: string,
@@ -154,5 +155,40 @@ export const onCreateNodeTemplate = async (
         })
 
         if (response) return 'Notion template saved'
+    }
+}
+
+export const onGetWorkFlows = async () => {
+    try {
+        const user = await currentUser();
+        if (!user) throw new Error('user does not exist');
+        const workflows = await db.workflows.findMany({
+            where: {
+                userId: user.id
+            }
+        })
+        if (!workflows) throw new Error('work flows does not exist');
+        return workflows
+    } catch (error) {
+        console.log(error);
+
+    }
+}
+export const onCreateWorkflow = async (title: string, description: string) => {
+    try {
+        const user = await currentUser();
+        if (!user) throw new Error('user does not exist');
+        const workflow = await db.workflows.create({
+            data: {
+                description,
+                name: title,
+                userId: user.id
+            }
+        })
+        if (!workflow) return { message: 'oops try again' }
+        return { message: 'workflow created' }
+    } catch (error) {
+        console.log(error);
+
     }
 }

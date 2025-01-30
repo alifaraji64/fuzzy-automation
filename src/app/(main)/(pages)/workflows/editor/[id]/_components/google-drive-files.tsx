@@ -9,7 +9,7 @@ import SVGLoader from '@/components/global/svg-loader'
 type Props = {
     nodeConnection: ConnectionProviderProps,
     googleFile: any,
-    setGoogleFile: (googleFile:any) => void
+    setGoogleFile: (googleFile: any) => void
 }
 
 function GoogleDriveFile({ nodeConnection, googleFile, setGoogleFile }: Props) {
@@ -19,6 +19,10 @@ function GoogleDriveFile({ nodeConnection, googleFile, setGoogleFile }: Props) {
     const reqGoogle = async () => {
         setloading(true);
         const response = await axios.get('/api/drive-activity')
+        console.log('response');
+        console.log(response);
+
+
         if (response) {
             toast({ title: response.data })
             setloading(false)

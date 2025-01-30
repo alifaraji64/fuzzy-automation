@@ -83,6 +83,7 @@ export const onConnections = async (
   editorState: EditorState,
   googleFile: any
 ) => {
+  //setting all the discord details from database to our context
   if (editorState.editor.selectedNode.data.title == 'Discord') {
     const connection = await getDiscordConnectionUrl()
     if (connection) {
