@@ -76,13 +76,11 @@ function ActionButton({
             nodeConnection.notionNode.content
         )
         if (response) {
+
+            toast({ title: 'Message sent successfully', style: { backgroundColor: 'green', color: 'white' } })
             nodeConnection.setNotionNode((prev: any) => ({
                 ...prev,
-                content: {
-                    name: '',
-                    kind: '',
-                    type: ''
-                }
+                content: ''
 
             }))
         }
@@ -94,14 +92,14 @@ function ActionButton({
             nodeConnection.slackNodeRef.current.content
         )
         if (response.message == 'Success') {
-            toast({ title: 'Message sent successfully',style:{backgroundColor:'green',color:'white'} })
+            toast({ title: 'Message sent successfully', style: { backgroundColor: 'green', color: 'white' } })
             nodeConnection.setSlackNode((prev: any) => ({
                 ...prev,
                 content: '',
             }))
             setChannels!([])
         } else {
-            toast({ title: response.message,variant:'destructive' })
+            toast({ title: response.message, variant: 'destructive' })
         }
     }, [])
     switch (currentService) {

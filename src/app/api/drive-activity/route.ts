@@ -58,7 +58,7 @@ export async function GET () {
 
   if (listener.status == 200) {
     //if listener created store its channel id in db
-    const channelStored = await db.user.updateMany({
+    const channelStored = await db.user.update({
       where: {
         clerkId: userId
       },

@@ -38,6 +38,15 @@ export const onDiscordContent = (
     }
   })
 }
+export const onNotionContent = (
+  nodeConnection: ConnectionProviderProps,
+  event: React.ChangeEvent<HTMLInputElement>
+) => {
+  nodeConnection.setNotionNode((prev: any) => ({
+    ...prev,
+    content: event.target.value,
+  }))
+}
 export const onContentChange = (
   nodeConnection: ConnectionProviderProps,
   nodeType: string,
@@ -45,6 +54,7 @@ export const onContentChange = (
 ) => {
   if (nodeType == 'Slack') return onSlackContent(nodeConnection, event)
   if (nodeType == 'Discord') return onDiscordContent(nodeConnection, event)
+  if (nodeType == 'Notion') return onNotionContent(nodeConnection, event)
 }
 const onAddTemplateSlack = (
   nodeConnection: ConnectionProviderProps,
@@ -134,8 +144,8 @@ export const onConnections = async (
 }
 
 export const fetchBotSlackChannels = (
-  token:string,
-  setSlackChannels:(slackChannels:Option[])=>void
-)=>{
-listBotChannels(token)?.then((channels:any)=>setSlackChannels(channels))
+  token: string,
+  setSlackChannels: (slackChannels: Option[]) => void
+) => {
+  listBotChannels(token)?.then((channels: any) => setSlackChannels(channels))
 }

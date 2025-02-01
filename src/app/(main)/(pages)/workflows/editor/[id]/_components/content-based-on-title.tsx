@@ -37,7 +37,7 @@ function ContentBasedOnTitle({
     const { title } = selectedNode.data
     const nodeConnectionType: any =
         nodeConnection[nodeMapper[title] as keyof ConnectionProviderProps]
-        
+
     if (!nodeConnectionType) return <p>Not Connected</p>
     const isConnected =
         title == 'Google Drive' ? !nodeConnection.isLoading
@@ -59,16 +59,13 @@ function ContentBasedOnTitle({
                 )}
                 <div className='flex flex-col gap-3 py-3 pb-20'>
                     <p>{title === 'Notion' ? 'values to be stored' : 'message'}</p>
-                    {title == 'Discord' || title == 'Slack' ? (
-                        <Input
-                            type='text'
-                            value={nodeConnectionType.content}
-                            onChange={(event) => {
-                                
-                                onContentChange(nodeConnection, title, event)
-                            }}
-                        />
-                    ) : null}
+                    <Input
+                        type='text'
+                        value={nodeConnectionType.content}
+                        onChange={(event) => {
+                            onContentChange(nodeConnection, title, event)
+                        }}
+                    />
                     {title !== 'Google Drive' ? (
                         <Card className='w-full'>
                             <CardContent className='px-2 py-3'>
@@ -84,20 +81,20 @@ function ContentBasedOnTitle({
                                 </div>
                             </CardContent>
                         </Card>
-                    ):(
+                    ) : (
                         <GoogleDriveFile
-                        nodeConnection={nodeConnection}
-                        googleFile={file}
-                        setGoogleFile={setFile}
+                            nodeConnection={nodeConnection}
+                            googleFile={file}
+                            setGoogleFile={setFile}
                         />
                     )
-                }
-                <ActionButton
-                currentService={title}
-                nodeConnection={nodeConnection}
-                channels={selectedSlackChannels}
-                setChannels={setSelectedSlackChannels}
-                />
+                    }
+                    <ActionButton
+                        currentService={title}
+                        nodeConnection={nodeConnection}
+                        channels={selectedSlackChannels}
+                        setChannels={setSelectedSlackChannels}
+                    />
 
                 </div>
             </Card>
