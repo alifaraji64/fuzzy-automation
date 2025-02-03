@@ -4,10 +4,32 @@ import { postMessageToSlack } from '@/app/(main)/(pages)/connections/_actions/sl
 import { db } from '@/lib/db'
 import axios from 'axios'
 import { headers } from 'next/headers'
-import { NextRequest } from 'next/server'
-export async function POST(req: NextRequest) {
-    console.log('🔴 Changed')
-    const headersList = await headers()
+import { NextRequest, NextResponse } from 'next/server'
+export const dynamic = "force-dynamic";
+export async function OPTIONS() {
+    return NextResponse.json(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+  }
+  export async function GET(req: NextRequest) {
+    return NextResponse.json('ffddff', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    });
+  }
+
+export async function POST(req: Request) {
+    try {
+        console.log('🔴 Changed')
+    const headersList = req.headers;
     let channelResourceId
     headersList.forEach((value, key) => {
         if (key == 'x-goog-resource-id') {
@@ -29,7 +51,7 @@ export async function POST(req: NextRequest) {
             },
         })
         if (workflows) {
-            workflows.map(async (flow) => {
+            for (const flow of workflows) {
                 const flowPath = JSON.parse(flow.flowPath!)
                 let current = 0
                 while (current < flowPath.length) {
@@ -126,7 +148,7 @@ export async function POST(req: NextRequest) {
                         credits: `${parseInt(user.credits!) - 1}`,
                     },
                 })
-            })
+            }
             return Response.json(
                 {
                     message: 'flow completed',
@@ -146,4 +168,8 @@ export async function POST(req: NextRequest) {
             status: 200,
         }
     )
+    } catch (error) {
+        console.log(error);
+
+    }
 }
