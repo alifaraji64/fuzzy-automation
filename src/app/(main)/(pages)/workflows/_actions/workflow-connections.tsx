@@ -10,6 +10,8 @@ export const onCreateNodesEdges = async (
     edges: string,
     flowPath: string
 ) => {
+    console.log(JSON.parse(nodes).length);
+    
     try {
         const flow = await db.workflows.update({
             where: {
@@ -191,4 +193,34 @@ export const onCreateWorkflow = async (title: string, description: string) => {
         console.log(error);
 
     }
+}
+export const onGetNodesEdges = async (flowId: string) => {
+    try {
+        const res = await db.workflows.findUnique({
+            where: {
+                id: flowId
+            },
+            select: {
+                nodes: true,
+                edges: true
+            }
+        })
+        if (res?.nodes && res?.edges) return res
+    } catch (error) {
+        console.log(error);
+
+    }
+
+    //     setIsWorkFlowLoading(true)
+    //     const response = await onGetNodesEdges(pathname.split('/').pop()!)
+    //     if (response) {
+    //       setEdges(JSON.parse(response.edges!))
+    //       setNodes(JSON.parse(response.nodes!))
+    //       setIsWorkFlowLoading(false)
+    //     }
+    //     setIsWorkFlowLoading(false)
+    //   }
+
+    //   useEffect(() => {
+    //     onGetWorkFlow()
 }

@@ -18,30 +18,24 @@ import { EditorCanvasDefaultCardTypes } from '@/lib/constants';
 import SVGLoader from '@/components/global/svg-loader';
 import FlowInstance from './flow-instance';
 import EditorCanvasSidebar from './editor-canvas-sidebar';
+import { onGetNodesEdges } from '../../../_actions/workflow-connections';
 type Props = {}
 
 export type CustomEdge = Edge & { target: string, source: string, id: string }
 
 function EditorCanvas({ }: Props) {
     const { toast } = useToast()
-    const nodeTypes = useMemo(
-        () => ({
-            Action: EditorCanvasCardSingle,
-            Trigger: EditorCanvasCardSingle,
-            Email: EditorCanvasCardSingle,
-            Condition: EditorCanvasCardSingle,
-            AI: EditorCanvasCardSingle,
-            Slack: EditorCanvasCardSingle,
-            'Google Drive': EditorCanvasCardSingle,
-            Notion: EditorCanvasCardSingle,
-            Discord: EditorCanvasCardSingle,
-            'Custom Webhook': EditorCanvasCardSingle,
-            'Google Calendar': EditorCanvasCardSingle,
-            Wait: EditorCanvasCardSingle,
-        }),
-        []
-
-    )
+    const nodeTypes = useMemo(() => {
+        const types = [
+            'Action', 'Trigger', 'Email', 'Condition', 'AI', 'Slack',
+            'Google Drive', 'Notion', 'Discord', 'Custom Webhook',
+            'Google Calendar', 'Wait'
+        ];
+        return types.reduce((acc: any, type) => {
+            acc[type] = EditorCanvasCardSingle;
+            return acc;
+        }, {});
+    }, []);
     const { dispatch, state } = useEditor()
     const [nodes, setNodes] = useState<EditorNodeType[]>([])
     const [edges, setEdges] = useState<CustomEdge[]>([])
@@ -57,7 +51,6 @@ function EditorCanvas({ }: Props) {
             const type: EditorCanvasCardType['type'] = event.dataTransfer.getData(
                 'application/reactflow'
             )
-            console.log(nodes);
 
 
             // check if the dropped element is valid
@@ -98,7 +91,6 @@ function EditorCanvas({ }: Props) {
             console.log("Before update:", nodes);
             setNodes((nds) => {
                 const updatedNodes = nds.concat(newNode);
-                console.log("After update:", updatedNodes);
                 return updatedNodes;
             });
         },
@@ -116,13 +108,23 @@ function EditorCanvas({ }: Props) {
         [setNodes]
     )
     const onEdgesChange = useCallback(
-        (changes: EdgeChange[]) =>
+        (changes: EdgeChange[]) => {
+
             //@ts-ignore
-            setEdges((eds) => applyEdgeChanges(changes, eds)),
+            setEdges((eds) => applyEdgeChanges(changes, eds))
+        },
+
         [setEdges]
     )
     const onConnect = useCallback(
-        (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
+        (params: Edge | Connection) => {
+            setEdges((eds) => {
+                return addEdge(params, eds)
+
+            })
+
+
+        },
         []
     )
     const handleClickCanvas = () => {
@@ -148,12 +150,28 @@ function EditorCanvas({ }: Props) {
             }
         })
     }
+    const onGetWorkFlow = async () => {
+        setIsWorkFlowLoading(true)
+        const response = await onGetNodesEdges(pathname.split('/').pop()!)
+        if (response) {
+            setEdges(JSON.parse(response.edges!))
+            setNodes(JSON.parse(response.nodes!))
+            setIsWorkFlowLoading(false)
+        }
+        setIsWorkFlowLoading(false)
+    }
+
     useEffect(() => {
-      dispatch({type:'LOAD_DATA',payload:{
-          edges,
-          elements: nodes
-      }})
-    }, [nodes,edges])
+        onGetWorkFlow()
+    }, [])
+    useEffect(() => {
+        dispatch({
+            type: 'LOAD_DATA', payload: {
+                edges,
+                elements: nodes
+            }
+        })
+    }, [nodes, edges])
 
 
     return (
@@ -201,10 +219,10 @@ function EditorCanvas({ }: Props) {
             <ResizableHandle />
             <ResizablePanel defaultSize={40} className='relative sm:block'>
                 {isWorkFlowLoading ?
-                 <SVGLoader /> :
-                 <FlowInstance edges={edges} nodes={nodes} >
-                    <EditorCanvasSidebar nodes={nodes} />
-                </FlowInstance>}
+                    <SVGLoader /> :
+                    <FlowInstance edges={edges} nodes={nodes} >
+                        <EditorCanvasSidebar nodes={nodes} />
+                    </FlowInstance>}
             </ResizablePanel>
         </ResizablePanelGroup>
     )

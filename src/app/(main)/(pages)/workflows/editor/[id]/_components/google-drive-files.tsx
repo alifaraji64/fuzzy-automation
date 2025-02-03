@@ -26,14 +26,17 @@ function GoogleDriveFile({ nodeConnection, googleFile, setGoogleFile }: Props) {
             setloading(false)
             setisListening(true)
         }
-        setisListening(false)
     }
     const onListener = async () => {
         const listener = await getGoogleListener();
+        console.log('erer');
+
         if (listener?.googleResourceId !== null) {
+            console.log('listening');
+
             setisListening(true)
         }
-        setisListening(false)
+
     }
     useEffect(() => {
         onListener()

@@ -18,13 +18,16 @@ function FlowInstance({ children, edges, nodes }: Props) {
     const [isFlow, setisFlow] = useState<EditorCanvasTypes[]>([])
     const { nodeConnection } = useNodeConnections()
     const onFlowAutomation = useCallback(async () => {
+        console.log(nodes);
+        console.log(edges);
+
         const flow = await onCreateNodesEdges(
             pathName.split('/').pop()!,
             JSON.stringify(nodes),
             JSON.stringify(edges),
             JSON.stringify(isFlow)
         )
-    }, [])
+    }, [nodes, edges])
     const onPublishWorkflow = useCallback(
         async () => {
             const response = await onFlowPublish(
@@ -48,7 +51,7 @@ function FlowInstance({ children, edges, nodes }: Props) {
     }
 
     useEffect(() => {
-      onAutomateFlow()
+        onAutomateFlow()
     }, [edges])
 
 

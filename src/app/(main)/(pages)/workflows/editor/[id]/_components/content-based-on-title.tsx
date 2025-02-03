@@ -59,28 +59,25 @@ function ContentBasedOnTitle({
                 )}
                 <div className='flex flex-col gap-3 py-3 pb-20'>
                     <p>{title === 'Notion' ? 'values to be stored' : 'message'}</p>
-                    <Input
-                        type='text'
-                        value={nodeConnectionType.content}
-                        onChange={(event) => {
-                            onContentChange(nodeConnection, title, event)
-                        }}
-                    />
                     {title !== 'Google Drive' ? (
-                        <Card className='w-full'>
-                            <CardContent className='px-2 py-3'>
-                                <div className='flex flex-col gap-4'>
-                                    <CardDescription>Drive File</CardDescription>
-                                    <div className='flex flex-wrap gap-2'>
-                                        <GoogleFileDetails
-                                            nodeConnection={nodeConnection}
-                                            title={title}
-                                            gFile={file}
-                                        />
+                        <><Input
+                            type='text'
+                            value={nodeConnectionType.content}
+                            onChange={(event) => {
+                                onContentChange(nodeConnection, title, event)
+                            }} /><Card className='w-full'>
+                                <CardContent className='px-2 py-3'>
+                                    <div className='flex flex-col gap-4'>
+                                        <CardDescription>Drive File</CardDescription>
+                                        <div className='flex flex-wrap gap-2'>
+                                            <GoogleFileDetails
+                                                nodeConnection={nodeConnection}
+                                                title={title}
+                                                gFile={file} />
+                                        </div>
                                     </div>
-                                </div>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card></>
                     ) : (
                         <GoogleDriveFile
                             nodeConnection={nodeConnection}

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/lib/db'
 
-export async function GET () {
+export async function GET() {
   console.log('just testing')
 
   const oauth2Client = new google.auth.OAuth2(
@@ -12,6 +12,11 @@ export async function GET () {
     process.env.GOOGLE_CLIENT_SECRET,
     process.env.OAUTH2_REDIRECT_URI
   )
+  try {
+
+  } catch (error) {
+
+  }
 
   const { userId } = await auth()
   if (!userId) {

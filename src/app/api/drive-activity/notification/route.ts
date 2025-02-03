@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         },
         select: { clerkId: true, credits: true },
     })
-    if ((user && parseInt(user.credits!) > 0) || user?.credits == 'Unlimited') {
+    if ((user && (parseInt(user.credits!) > 0) || user?.credits == 'Unlimited')) {
         const workflows = await db.workflows.findMany({
             where: {
                 userId: user.clerkId,
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
                                 flow.discordTemplate!,
                                 discordMessage.url
                             )
-                            flowPath.splice(flowPath[current], 1)
+                            flowPath.splice(current, 1)
                         }
                     }
                     //we have the slackaccestoken and slackchannles in workflow table so we don't need to get it from their own tables
