@@ -47,6 +47,8 @@ function FlowInstance({ children, edges, nodes }: Props) {
                 }
             })
         })
+        console.log(flows);
+        
         setisFlow(flows)
     }
 

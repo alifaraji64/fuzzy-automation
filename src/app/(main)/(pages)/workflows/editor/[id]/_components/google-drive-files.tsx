@@ -29,7 +29,6 @@ function GoogleDriveFile({ nodeConnection, googleFile, setGoogleFile }: Props) {
     }
     const onListener = async () => {
         const listener = await getGoogleListener();
-        console.log('erer');
 
         if (listener?.googleResourceId !== null) {
             console.log('listening');

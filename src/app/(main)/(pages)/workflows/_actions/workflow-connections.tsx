@@ -11,6 +11,9 @@ export const onCreateNodesEdges = async (
     flowPath: string
 ) => {
     console.log(JSON.parse(nodes).length);
+    console.log('flowpath');
+    console.log(flowPath);
+    
     
     try {
         const flow = await db.workflows.update({
@@ -90,6 +93,7 @@ export const onCreateNodeTemplate = async (
             data: {
                 slackTemplate: content,
                 slackAccessToken: accessToken,
+                slackChannels:channels?.map(chnl=>chnl.label)
             },
         })
 
@@ -152,7 +156,7 @@ export const onCreateNodeTemplate = async (
             data: {
                 notionTemplate: content,
                 notionAccessToken: accessToken,
-                notionDbId: notionDbId,
+                notionDbId: notionDbId
             },
         })
 

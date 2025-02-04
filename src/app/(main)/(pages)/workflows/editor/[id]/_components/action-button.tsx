@@ -36,7 +36,8 @@ function ActionButton({
             const response = await onCreateNodeTemplate(
                 nodeConnection.discordNode.content,
                 currentService,
-                pathname.split('/').pop()!
+                pathname.split('/').pop()!,
+                channels,
             )
             if (response) {
                 toast({ title: response })
@@ -44,7 +45,7 @@ function ActionButton({
         }
         if (currentService == 'Slack') {
             const response = await onCreateNodeTemplate(
-                nodeConnection.discordNode.content,
+                nodeConnection.slackNodeRef.current.content,
                 currentService,
                 pathname.split('/').pop()!,
                 channels,
@@ -56,7 +57,7 @@ function ActionButton({
         }
         if (currentService == 'Notion') {
             const response = await onCreateNodeTemplate(
-                nodeConnection.discordNode.content,
+                nodeConnection.notionNode.content,
                 currentService,
                 pathname.split('/').pop()!,
                 [],

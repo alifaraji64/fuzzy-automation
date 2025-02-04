@@ -12,11 +12,6 @@ export async function GET() {
     process.env.GOOGLE_CLIENT_SECRET,
     process.env.OAUTH2_REDIRECT_URI
   )
-  try {
-
-  } catch (error) {
-
-  }
 
   const { userId } = await auth()
   if (!userId) {
