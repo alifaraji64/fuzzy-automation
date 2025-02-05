@@ -7,6 +7,7 @@ import {
 } from '@clerk/nextjs'
 import ModalProvider from "@/providers/modal-provider";
 import { Toaster } from "@/components/ui/toaster"
+import { BillingProvider } from "@/providers/billing-provider";
 const font = DM_Sans({
   subsets: ["latin"],
 });
@@ -29,10 +30,12 @@ export default function RootLayout({
           className={`${font.className} antialiased`}
         >
           <ThemeProvider attribute={'class'} defaultTheme="dark" enableSystem>
-            <ModalProvider>
-              {children}
-              <Toaster />
-            </ModalProvider>
+            <BillingProvider>
+              <ModalProvider>
+                {children}
+                <Toaster />
+              </ModalProvider>
+            </BillingProvider>
           </ThemeProvider>
         </body>
       </html>

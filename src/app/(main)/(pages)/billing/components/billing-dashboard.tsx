@@ -6,16 +6,17 @@ import React, { useEffect, useState } from 'react'
 import { SubscriptionCard } from './subscription-card'
 import CreditTracker from './credits-tracker'
 import SVGLoader from '@/components/global/svg-loader'
+import { getTierAndCredits } from '../_actions/get-payment-details'
 
 type Props = {}
 
 const BillingDashboard = (props: Props) => {
-    const { credits, tier } = useBilling()
+    const { credits, tier, setTier, setCredits } = useBilling()
     const [stripeProducts, setStripeProducts] = useState<any>([])
     const [loading, setLoading] = useState<boolean>(false)
 
     const onStripeProducts = async () => {
-        setLoading(false)
+        setLoading(true)
         const { data } = await axios.get('/api/payment')
         if (data) {
             setStripeProducts(data)
@@ -23,9 +24,15 @@ const BillingDashboard = (props: Props) => {
         }
         setLoading(false)
     }
+    const getBillingdetails = async () => {
+        const tierAndCredits = await getTierAndCredits()
+        setTier(tierAndCredits?.tier || tier)
+        setCredits(tierAndCredits?.credits || credits)
+    }
 
     useEffect(() => {
         onStripeProducts()
+        getBillingdetails()
     }, [])
 
     const onPayment = async (id: string) => {

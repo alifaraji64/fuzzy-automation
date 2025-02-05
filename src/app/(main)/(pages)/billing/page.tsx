@@ -8,7 +8,7 @@ type Props = {
 }
 
 async function Billing(props: Props) {
-    const { session_id } = props.searchParams ?? { session_id: '' }
+    const { session_id } = await props.searchParams ?? { session_id: '' }
     if (session_id) {
         const stripe = new Stripe(process.env.STRIPE_SECRET!, {
             typescript: true,
